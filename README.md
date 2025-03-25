@@ -16,4 +16,4 @@
 * node server.js
 * Open your browser and go to http://localhost:3000 (or the port you configured).
 # deploymant link
-* https://xolanimba.github.io/XolaniMba-To-do-list-/
+* /https://tiyani33.github.io/TO-DO-LIST/
