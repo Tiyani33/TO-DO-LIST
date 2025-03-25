@@ -11,7 +11,7 @@
 * A code editor eg. Visual Studio Code.
 # Installation
 * Clone the repository or download the project folder.
-* "https://github.com/XolaniMba/XolaniMba-To-do-list-.git"
+* "[https://github.com/Tiyani33/TO-DO-LIST.git](https://github.com/Tiyani33/TO-DO-LIST.git)"
 # Start the Node.js server:
 * node server.js
 * Open your browser and go to http://localhost:3000 (or the port you configured).
