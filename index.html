@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>to-do list</title>
+   <link  href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+   <link rel="stylesheet" href="mainStyle.css">
+   <style>
+
+   </style>
+</head>
+
+<body>
+    <div class="app">
+        <h1>To-Do   APP</h1>
+
+        <div class="container">
+            <div id="wrapper">
+               <input type="text" placeholder="WHAT DO YOU WANT TO ACCOMPLISH TODAY"/> 
+              <button id="add-btn">Add</button>
+            </div>
+            <div id="tasks">
+                <p id="pend-tasks">
+                    You have <span class="count-value">0</span>
+                    tasks(s) to complete.
+                </p>
+
+            </div>
+
+        </div>
+        <p id="error"> text cannot be empty!!</p>
+    </div>
+    <!-- js link -->
+     <script src="test.js"></script>
+</body>
+</html>
