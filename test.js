@@ -11,7 +11,7 @@ const loadTasks = () => {
     tasks.forEach(task => {
         const taskElement = createTaskElement(task.name, task.completed);
         tasksContainer.appendChild(taskElement);
-        taskCount++;
+        if (!task.completed) taskCount++;
     });
     displayCount(taskCount);
 };
@@ -75,16 +75,22 @@ const addTask = () => {
 
 // Delete task
 const deleteTask = (taskElement) => {
+    if (!taskElement.querySelector(".task-check").checked) {
+        taskCount--;
+    }
     taskElement.remove();
-    taskCount--;
     displayCount(taskCount);
     saveTasks();  // Save updated tasks to localStorage
 };
 
 // Edit task
 const editTask = (taskElement) => {
-    newTaskInput.value = taskElement.querySelector(".taskName").innerText;
-    deleteTask(taskElement);  // Remove the task from the list
+    const taskName = taskElement.querySelector(".taskName").innerText;
+    const newTaskName = prompt("Edit your task:", taskName);
+    if (newTaskName !== null && newTaskName.trim() !== "") {
+        taskElement.querySelector(".taskName").innerText = newTaskName.trim();
+        saveTasks();  // Save updated tasks to localStorage
+    }
 };
 
 // Toggle task completion (checkbox)

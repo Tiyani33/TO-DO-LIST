@@ -8,15 +8,14 @@ h1{
  text-align: center;
  padding: 0.5rem;
  text-decoration: underline;
-color: white;
+color: rgb(77, 74, 74);
 font-family: Lucida Handwriting;
 gap: 15rem;
 
 }
 body
 {
-    height: 100vh;
-         background-image: url("home-bg.jpg");
+   background-color: rgb(227, 233, 230);
         
        }   
 
@@ -37,7 +36,7 @@ body
     box-shadow: 0 1em 2em rgba(0,0,0,0.3);
     border-radius: 0.5em;
     margin: 3.5em;
-    background: rgba(255,255,255,0.1);
+    background: rgba(36, 42, 43, 0.1);
     /* backdrop-filter: blur(15px); */
 }
 #wrapper
@@ -68,7 +67,7 @@ input::placeholder {
 #wrapper input:focus
 {
     outline: none;
-    border-color: #5a95ff;
+    border-color: #3f434b;
 }
 #wrapper button
 {
@@ -76,7 +75,7 @@ input::placeholder {
     border-radius: 0.5;
     font-weight: 500;
     font-size: 1em;
-    background-color: #5a95ff;
+    background-color: #3449af;
     border: none;
     outline: none;
     color: #ffffff;
@@ -115,7 +114,7 @@ input::placeholder {
 }
 .task button
 {
-    color: #ffffff;
+    color: #fdfdfd;
     width: 100%;
     padding: 1em 0;
     border-radius: 0.5em;
@@ -125,17 +124,17 @@ input::placeholder {
 }
 .edit
 {
-    background-color: #5a95ff;
+    background-color: #3449a0;
 }
 .delete 
 {
-    background-color: #ff5c5c;
+    background-color: #3449a0;
 }
 #error 
 {
     text-align: center;
     background-color: transparent;
-    color: #ff5c5c;
+    color: #5ce7ff;
     margin-top: 1.5em;
     padding: 1em 0;
     display: none;
@@ -151,4 +150,96 @@ input::placeholder {
      /* look for a better color */
 }
 
+.app-footer {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    color: #3449a0;
+    padding: 2em;
+    margin-top: 2em;
+    border-radius: 0.5em;
+    box-shadow: 0 1em 2em rgba(0,0,0,0.3);
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5em;
+}
+
+.footer-left h3 {
+    font-size: 1.5em;
+    margin-bottom: 0.5em;
+    color: #5a95ff;
+}
+
+.footer-right {
+    display: flex;
+    align-items: center;
+    gap: 2em;
+}
+
+.footer-stats {
+    display: flex;
+    gap: 1.5em;
+}
+
+.stat-item {
+    text-align: center;
+    background: rgba(255,255,255,0.05);
+    padding: 1em;
+    border-radius: 0.5em;
+}
+
+.stat-item i {
+    font-size: 1.5em;
+    color: #020202;
+    margin-bottom: 0.5em;
+}
+
+.stat-item .total-tasks,
+.stat-item .completed-tasks {
+    display: block;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #000000;
+}
+
+.footer-links {
+    display: flex;
+    gap: 1em;
+}
+
+.footer-link {
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+    color: #5a95ff;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.social-icons {
+    display: flex;
+    gap: 1em;
+}
+
+.social-icon {
+    color: rgb(0, 0, 0);
+    font-size: 1.2em;
+    transition: color 0.3s ease;
+}
+
+.social-icon:hover {
+    color: #5a95ff;
+}
 
