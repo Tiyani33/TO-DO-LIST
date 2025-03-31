@@ -2,23 +2,37 @@ const addBtn = document.querySelector("#add-btn");
 const newTaskInput = document.querySelector("#wrapper input");
 const tasksContainer = document.querySelector("#tasks");
 const error = document.getElementById("error");
-const countValue = document.querySelector(".count-value"); // Fixed selector (added dot for class)
-let taskCount = 0;
+const pendTasksCount = document.querySelector(".count-value"); // Pending tasks count
+const totalTasksCount = document.querySelector(".total-tasks"); // Total tasks in footer
+const completedTasksCount = document.querySelector(".completed-tasks"); // Completed tasks in footer
 
-const displayCount = (taskCount) => {
-    countValue.innerText = taskCount;
+let taskCount = 0;
+let completedCount = 0;
+
+const displayCounts = () => {
+    pendTasksCount.innerText = taskCount - completedCount; // Pending = total - completed
+    totalTasksCount.innerText = taskCount;
+    completedTasksCount.innerText = completedCount;
 };
 
 const fetchTasks = async () => {
     try {
         const response = await fetch('http://localhost:3000/api/tasks');
         const tasks = await response.json();
-        tasksContainer.innerHTML = ''; // Clear existing tasks
+        
+        // Clear existing tasks but keep the "You have X tasks" paragraph
+        while (tasksContainer.children.length > 1) {
+            tasksContainer.removeChild(tasksContainer.lastChild);
+        }
+        
+        taskCount = tasks.length;
+        completedCount = tasks.filter(task => task.completed).length;
+        
         tasks.forEach(task => {
             addTaskToDOM(task);
         });
-        taskCount = tasks.length;
-        displayCount(taskCount);
+        
+        displayCounts();
     } catch (err) {
         console.error('Error fetching tasks:', err);
     }
@@ -38,9 +52,10 @@ const addTaskToDOM = (task) => {
             <i class="fa-solid fa-trash"></i>
         </button>
     `;
+    // Insert after the pending tasks paragraph
     tasksContainer.appendChild(taskElement);
 
-    // Add event listeners for the new task
+    // Add event listeners
     const checkbox = taskElement.querySelector('.task-check');
     const deleteBtn = taskElement.querySelector('.delete');
     const editBtn = taskElement.querySelector('.edit');
@@ -72,8 +87,8 @@ const addTask = async () => {
         const newTask = await response.json();
         addTaskToDOM(newTask);
         taskCount++;
-        displayCount(taskCount);
-        newTaskInput.value = ''; // Clear input
+        displayCounts();
+        newTaskInput.value = '';
     } catch (err) {
         console.error('Error adding task:', err);
     }
@@ -88,7 +103,13 @@ const toggleTaskComplete = async (taskId, completed) => {
             },
             body: JSON.stringify({ completed })
         });
-        fetchTasks(); // Refresh the task list
+        
+        if (completed) {
+            completedCount++;
+        } else {
+            completedCount--;
+        }
+        displayCounts();
     } catch (err) {
         console.error('Error updating task:', err);
     }
@@ -96,11 +117,18 @@ const toggleTaskComplete = async (taskId, completed) => {
 
 const deleteTask = async (taskId) => {
     try {
+        const taskElement = document.querySelector(`.task[data-id="${taskId}"]`);
+        const wasCompleted = taskElement.querySelector('.task-check').checked;
+        
         await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
             method: 'DELETE'
         });
+        
         taskCount--;
-        displayCount(taskCount);
+        if (wasCompleted) {
+            completedCount--;
+        }
+        displayCounts();
         fetchTasks(); // Refresh the task list
     } catch (err) {
         console.error('Error deleting task:', err);
@@ -128,4 +156,3 @@ const editTask = (taskId) => {
 // Initialize the app
 addBtn.addEventListener("click", addTask);
 fetchTasks();
-

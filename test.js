@@ -2,54 +2,65 @@ const addBtn = document.querySelector("#add-btn");
 const newTaskInput = document.querySelector("#wrapper input");
 const tasksContainer = document.querySelector("#tasks");
 const error = document.getElementById("error");
-const countValue = document.querySelector(".count-value");
-let taskCount = 0;
+const totalTasksDisplay = document.querySelector(".total-tasks"); // For total tasks count
+const completedTasksDisplay = document.querySelector(".completed-tasks"); // For completed tasks count
+
+let tasks = [];
 
 // Load tasks from localStorage when the page is loaded
 const loadTasks = () => {
-    const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-    tasks.forEach(task => {
-        const taskElement = createTaskElement(task.name, task.completed);
-        tasksContainer.appendChild(taskElement);
-        if (!task.completed) taskCount++;
-    });
-    displayCount(taskCount);
+    const savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    tasks = savedTasks;
+    renderTasks();
+    updateCounters();
 };
 
 // Save tasks to localStorage
 const saveTasks = () => {
-    const tasks = [];
-    const taskElements = tasksContainer.querySelectorAll(".task");
-    taskElements.forEach(taskElement => {
-        const taskName = taskElement.querySelector(".taskName").innerText;
-        const taskCompleted = taskElement.querySelector(".task-check").checked;
-        tasks.push({ name: taskName, completed: taskCompleted });
-    });
     localStorage.setItem("tasks", JSON.stringify(tasks));
+    updateCounters();
+};
+
+// Update all counters
+const updateCounters = () => {
+    const totalTasks = tasks.length;
+    const completedTasks = tasks.filter(task => task.completed).length;
+    
+    totalTasksDisplay.textContent = totalTasks;
+    completedTasksDisplay.textContent = completedTasks;
+};
+
+// Render all tasks to the DOM
+const renderTasks = () => {
+    tasksContainer.innerHTML = `
+        <p id="pend-tasks">
+            You have <span class="count-value">${tasks.length - tasks.filter(t => t.completed).length}</span>
+            task(s) to complete.
+        </p>
+    `;
+    
+    tasks.forEach(task => {
+        const taskElement = createTaskElement(task.name, task.completed, task.id);
+        tasksContainer.appendChild(taskElement);
+    });
 };
 
 // Create a task element
-const createTaskElement = (taskName, completed = false) => {
-    const task = `
-        <div class="task">
-            <input type="checkbox" class="task-check" ${completed ? 'checked' : ''}>
-            <span class="taskName ${completed ? 'completed' : ''}">${taskName}</span>
-            <button class="edit">
-                <i class="fa-solid fa-pen-to-square"></i>
-            </button>
-            <button class="delete">
-                <i class="fa-solid fa-trash"></i>
-            </button>
-        </div>`;
-
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = task;
-    return tempDiv.firstElementChild;
-};
-
-// Display task count
-const displayCount = (taskCount) => {
-    countValue.innerText = taskCount;
+const createTaskElement = (taskName, completed = false, id) => {
+    const taskElement = document.createElement('div');
+    taskElement.className = 'task';
+    taskElement.dataset.id = id;
+    taskElement.innerHTML = `
+        <input type="checkbox" class="task-check" ${completed ? 'checked' : ''}>
+        <span class="taskName ${completed ? 'completed' : ''}">${taskName}</span>
+        <button class="edit">
+            <i class="fa-solid fa-pen-to-square"></i>
+        </button>
+        <button class="delete">
+            <i class="fa-solid fa-trash"></i>
+        </button>
+    `;
+    return taskElement;
 };
 
 // Add new task
@@ -64,55 +75,59 @@ const addTask = () => {
         return;
     }
 
-    const taskElement = createTaskElement(taskName);
-    tasksContainer.appendChild(taskElement);
-    taskCount++;
-    displayCount(taskCount);
-    newTaskInput.value = "";
+    const newTask = {
+        id: Date.now().toString(),
+        name: taskName,
+        completed: false
+    };
 
-    saveTasks();  // Save updated tasks to localStorage
+    tasks.push(newTask);
+    saveTasks();
+    renderTasks();
+    newTaskInput.value = "";
 };
 
 // Delete task
-const deleteTask = (taskElement) => {
-    if (!taskElement.querySelector(".task-check").checked) {
-        taskCount--;
-    }
-    taskElement.remove();
-    displayCount(taskCount);
-    saveTasks();  // Save updated tasks to localStorage
+const deleteTask = (taskId) => {
+    tasks = tasks.filter(task => task.id !== taskId);
+    saveTasks();
+    renderTasks();
 };
 
 // Edit task
-const editTask = (taskElement) => {
-    const taskName = taskElement.querySelector(".taskName").innerText;
-    const newTaskName = prompt("Edit your task:", taskName);
+const editTask = (taskId) => {
+    const task = tasks.find(t => t.id === taskId);
+    const newTaskName = prompt("Edit your task:", task.name);
     if (newTaskName !== null && newTaskName.trim() !== "") {
-        taskElement.querySelector(".taskName").innerText = newTaskName.trim();
-        saveTasks();  // Save updated tasks to localStorage
+        task.name = newTaskName.trim();
+        saveTasks();
+        renderTasks();
     }
 };
 
-// Toggle task completion (checkbox)
-const toggleTaskCompletion = (taskElement, isChecked) => {
-    taskElement.querySelector(".taskName").classList.toggle("completed", isChecked);
-    taskCount += isChecked ? -1 : 1;  // Decrease or increase task count based on completion state
-    displayCount(taskCount);
-    saveTasks();  // Save updated tasks to localStorage
+// Toggle task completion
+const toggleTaskCompletion = (taskId, isChecked) => {
+    const task = tasks.find(t => t.id === taskId);
+    if (task) {
+        task.completed = isChecked;
+        saveTasks();
+        renderTasks();
+    }
 };
 
 // Event delegation for task actions
 tasksContainer.addEventListener("click", (event) => {
     const taskElement = event.target.closest(".task");
+    if (!taskElement) return;
 
-    if (!taskElement) return; // Ensure we have a valid task element
+    const taskId = taskElement.dataset.id;
 
     if (event.target.classList.contains("delete") || event.target.closest(".delete")) {
-        deleteTask(taskElement);
+        deleteTask(taskId);
     }
 
     if (event.target.classList.contains("edit") || event.target.closest(".edit")) {
-        editTask(taskElement);
+        editTask(taskId);
     }
 });
 
@@ -120,12 +135,19 @@ tasksContainer.addEventListener("click", (event) => {
 tasksContainer.addEventListener("change", (event) => {
     if (event.target.classList.contains("task-check")) {
         const taskElement = event.target.closest(".task");
-        toggleTaskCompletion(taskElement, event.target.checked);
+        toggleTaskCompletion(taskElement.dataset.id, event.target.checked);
     }
 });
 
 // Add task on button click
 addBtn.addEventListener("click", addTask);
+
+// Add task on Enter key press
+newTaskInput.addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
+        addTask();
+    }
+});
 
 // Load tasks when the page is ready
 window.addEventListener("DOMContentLoaded", loadTasks);
