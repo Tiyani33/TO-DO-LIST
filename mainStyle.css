@@ -8,14 +8,19 @@ h1{
  text-align: center;
  padding: 0.5rem;
  text-decoration: underline;
-color: rgb(77, 74, 74);
+color: rgb(75, 74, 77);
 font-family: Lucida Handwriting;
 gap: 15rem;
 
 }
+
+.list h1{
+    color: #0018f5;
+}
+
 body
 {
-   background-color: rgb(227, 233, 230);
+   background-color: rgb(245, 245, 238);
         
        }   
 
@@ -36,7 +41,7 @@ body
     box-shadow: 0 1em 2em rgba(0,0,0,0.3);
     border-radius: 0.5em;
     margin: 3.5em;
-    background: rgba(36, 42, 43, 0.1);
+    background: rgba(248, 251, 252, 0.1);
     /* backdrop-filter: blur(15px); */
 }
 #wrapper
@@ -58,7 +63,7 @@ body
     padding: 1em 0.5em;
 }
 input::placeholder {
-    color: #05122b;
+    color: #485b80;
     font-style: italic;
     font-size: 14px;
     opacity: 0.8;

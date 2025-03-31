@@ -18,6 +18,7 @@ const displayCounts = () => {
 const fetchTasks = async () => {
     try {
         const response = await fetch('http://localhost:3000/api/tasks');
+        if (!response.ok) throw new Error('Failed to fetch tasks');
         const tasks = await response.json();
         
         // Clear existing tasks but keep the "You have X tasks" paragraph
@@ -35,13 +36,15 @@ const fetchTasks = async () => {
         displayCounts();
     } catch (err) {
         console.error('Error fetching tasks:', err);
+        error.style.display = "block";
+        error.textContent = "Failed to load tasks. Please refresh the page.";
     }
 };
 
 const addTaskToDOM = (task) => {
     const taskElement = document.createElement('div');
     taskElement.className = 'task';
-    taskElement.dataset.id = task._id;
+    taskElement.dataset.id = task._id || task.id; // Handle both _id and id
     taskElement.innerHTML = `
         <input type="checkbox" class="task-check" ${task.completed ? 'checked' : ''}>
         <span class="taskName ${task.completed ? 'completed' : ''}">${task.name}</span>
@@ -52,17 +55,7 @@ const addTaskToDOM = (task) => {
             <i class="fa-solid fa-trash"></i>
         </button>
     `;
-    // Insert after the pending tasks paragraph
     tasksContainer.appendChild(taskElement);
-
-    // Add event listeners
-    const checkbox = taskElement.querySelector('.task-check');
-    const deleteBtn = taskElement.querySelector('.delete');
-    const editBtn = taskElement.querySelector('.edit');
-
-    checkbox.addEventListener('change', () => toggleTaskComplete(task._id, checkbox.checked));
-    deleteBtn.addEventListener('click', () => deleteTask(task._id));
-    editBtn.addEventListener('click', () => editTask(task._id));
 };
 
 const addTask = async () => {
@@ -70,9 +63,8 @@ const addTask = async () => {
     error.style.display = "none";
     
     if (!taskName) {
-        setTimeout(() => {
-            error.style.display = "block";
-        }, 200);
+        error.style.display = "block";
+        error.textContent = "Please enter a task name";
         return;
     }
 
@@ -84,6 +76,9 @@ const addTask = async () => {
             },
             body: JSON.stringify({ name: taskName })
         });
+        
+        if (!response.ok) throw new Error('Failed to add task');
+        
         const newTask = await response.json();
         addTaskToDOM(newTask);
         taskCount++;
@@ -91,18 +86,85 @@ const addTask = async () => {
         newTaskInput.value = '';
     } catch (err) {
         console.error('Error adding task:', err);
+        error.style.display = "block";
+        error.textContent = "Failed to add task. Please try again.";
     }
 };
 
 const toggleTaskComplete = async (taskId, completed) => {
     try {
-        await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
+        const response = await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ completed })
         });
+
+        // ... (previous code remains the same until toggleTaskComplete function)
+
+const toggleTaskComplete = async (taskId, completed) => {
+    try {
+        const response = await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ completed })
+        });
+        
+        if (!response.ok) throw new Error('Failed to update task');
+        
+        if (completed) {
+            completedCount++;
+            triggerConfetti(); // Add confetti when task is completed
+        } else {
+            completedCount--;
+        }
+        displayCounts();
+    } catch (err) {
+        console.error('Error updating task:', err);
+        error.style.display = "block";
+        error.textContent = "Failed to update task status. Please try again.";
+    }
+};
+
+// Confetti function
+const triggerConfetti = () => {
+    const defaults = {
+        spread: 360,
+        ticks: 70,
+        gravity: 0,
+        decay: 0.95,
+        startVelocity: 30,
+        colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"],
+        origin: { x: 0.5, y: 0.5 }
+    };
+
+    function shoot() {
+        confetti({
+            ...defaults,
+            particleCount: 40,
+            scalar: 1.2,
+            shapes: ["circle", "square"]
+        });
+
+        confetti({
+            ...defaults,
+            particleCount: 10,
+            scalar: 0.75,
+            shapes: ["circle"]
+        });
+    }
+
+    setTimeout(shoot, 0);
+    setTimeout(shoot, 100);
+    setTimeout(shoot, 200);
+};
+
+// ... (rest of the code remains the same)
+        
+        if (!response.ok) throw new Error('Failed to update task');
         
         if (completed) {
             completedCount++;
@@ -112,47 +174,96 @@ const toggleTaskComplete = async (taskId, completed) => {
         displayCounts();
     } catch (err) {
         console.error('Error updating task:', err);
+        error.style.display = "block";
+        error.textContent = "Failed to update task status. Please try again.";
     }
 };
 
 const deleteTask = async (taskId) => {
+    if (!confirm('Are you sure you want to delete this task?')) return;
+    
     try {
         const taskElement = document.querySelector(`.task[data-id="${taskId}"]`);
-        const wasCompleted = taskElement.querySelector('.task-check').checked;
+        if (!taskElement) throw new Error('Task element not found');
         
-        await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
+        const wasCompleted = taskElement.querySelector('.task-check').checked;
+        const response = await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
             method: 'DELETE'
         });
+        
+        if (!response.ok) throw new Error('Failed to delete task');
         
         taskCount--;
         if (wasCompleted) {
             completedCount--;
         }
+        taskElement.remove();
         displayCounts();
-        fetchTasks(); // Refresh the task list
     } catch (err) {
         console.error('Error deleting task:', err);
+        error.style.display = "block";
+        error.textContent = "Failed to delete task. Please try again.";
     }
 };
 
-const editTask = (taskId) => {
+const editTask = async (taskId) => {
     const taskElement = document.querySelector(`.task[data-id="${taskId}"]`);
-    const taskNameElement = taskElement.querySelector('.taskName');
-    const newName = prompt('Edit task:', taskNameElement.textContent);
+    if (!taskElement) return;
     
-    if (newName && newName.trim() !== '') {
-        fetch(`http://localhost:3000/api/tasks/${taskId}`, {
+    const taskNameElement = taskElement.querySelector('.taskName');
+    const currentName = taskNameElement.textContent;
+    const newName = prompt('Edit task:', currentName);
+    
+    if (!newName || newName.trim() === '' || newName === currentName) return;
+    
+    try {
+        const response = await fetch(`http://localhost:3000/api/tasks/${taskId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({ name: newName.trim() })
-        })
-        .then(() => fetchTasks())
-        .catch(err => console.error('Error updating task:', err));
+        });
+        
+        if (!response.ok) throw new Error('Failed to update task');
+        
+        taskNameElement.textContent = newName.trim();
+    } catch (err) {
+        console.error('Error updating task:', err);
+        error.style.display = "block";
+        error.textContent = "Failed to update task. Please try again.";
     }
 };
 
+// Event Delegation for dynamic elements
+tasksContainer.addEventListener('click', (e) => {
+    const target = e.target;
+    const taskElement = target.closest('.task');
+    
+    if (!taskElement) return;
+    
+    const taskId = taskElement.dataset.id;
+    
+    if (target.classList.contains('delete') || target.closest('.delete')) {
+        deleteTask(taskId);
+    } 
+    else if (target.classList.contains('edit') || target.closest('.edit')) {
+        editTask(taskId);
+    }
+});
+
+tasksContainer.addEventListener('change', (e) => {
+    if (e.target.classList.contains('task-check')) {
+        const taskElement = e.target.closest('.task');
+        const taskId = taskElement.dataset.id;
+        toggleTaskComplete(taskId, e.target.checked);
+    }
+});
+
 // Initialize the app
 addBtn.addEventListener("click", addTask);
+newTaskInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") addTask();
+});
+
 fetchTasks();
