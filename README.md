@@ -1,6 +1,6 @@
 # 📝 To-Do List Application
 
-![App Screenshot](https://i.imgur.com/sample-screenshot.png)  
+![App Screenshot](./Capture%202.PNG)  
 *Replace with your actual application screenshot*
 
 A modern, intuitive to-do list application that helps you stay organized and productive. Built with HTML, CSS, and JavaScript with local storage persistence.
