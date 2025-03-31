@@ -1,187 +1,208 @@
-*{
-    padding: 0 ;
+/* Updated mainStyle.css */
+* {
+    padding: 0;
     margin: 0;
-    box-sizing: border-box; 
-    margin: 0.2em;
-}
-h1{
- text-align: center;
- padding: 0.5rem;
- text-decoration: underline;
-color: rgb(75, 74, 77);
-font-family: Lucida Handwriting;
-gap: 15rem;
-
+    box-sizing: border-box;
 }
 
-.list h1{
-    color: #0018f5;
+body {
+    background-color: #faf5ff; /* Soft lavender background */
+    font-family: "Poppins", sans-serif;
+    color: #333;
+    line-height: 1.6;
 }
 
-body
-{
-   background-color: rgb(245, 245, 238);
-        
-       }   
-
-.app
-{
-   font-family: "Poppins" , sans-serif;
-
-   position: absolute;
-   margin: auto;
-   left: 0;
-   right: 0;
-   top: 1.875;
+h1 {
+    text-align: center;
+    padding: 1rem 0;
+    color: #7a4aaf; /* Purple tone */
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    margin-bottom: 1rem;
 }
-.container
-{
-    padding: 2em 2.5em;
-    background-color: transparent;
-    box-shadow: 0 1em 2em rgba(0,0,0,0.3);
-    border-radius: 0.5em;
-    margin: 3.5em;
-    background: rgba(248, 251, 252, 0.1);
-    /* backdrop-filter: blur(15px); */
+
+.list {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
 }
-#wrapper
-{
+
+.container {
+    padding: 2em;
+    background-color: white;
+    box-shadow: 0 5px 15px rgba(122, 74, 175, 0.1);
+    border-radius: 12px;
+    margin-bottom: 2em;
+}
+
+#wrapper {
     position: relative;
     display: grid;
-    grid-template-columns: 8fr 4fr;
+    grid-template-columns: 1fr auto;
     gap: 1em;
+    margin-bottom: 1em;
 }
-#wrapper input 
-{
+
+#wrapper input {
     width: 100%;
-    border-radius: 0.5rem;
-    background: rgba(255,255,255,0.1);
-    /* backdrop-filter: blur(15px); */
-    color: #111111;
-    border: none;
-    border-bottom: 4px solid #d1d3d4;
-    padding: 1em 0.5em;
+    border-radius: 8px;
+    background: white;
+    color: #333;
+    border: 2px solid #e0d0f0;
+    padding: 0.8em 1em;
+    font-size: 16px;
+    transition: all 0.3s ease;
 }
+
+#wrapper input:focus {
+    outline: none;
+    border-color: #b38ad6;
+    box-shadow: 0 0 0 3px rgba(179, 138, 214, 0.2);
+}
+
 input::placeholder {
-    color: #485b80;
+    color: #a0a0a0;
     font-style: italic;
     font-size: 14px;
     opacity: 0.8;
-    font-weight: 680;
-  }
-#wrapper input:focus
-{
-    outline: none;
-    border-color: #3f434b;
-}
-#wrapper button
-{
-    position: relative;
-    border-radius: 0.5;
-    font-weight: 500;
-    font-size: 1em;
-    background-color: #3449af;
-    border: none;
-    outline: none;
-    color: #ffffff;
-    cursor: pointer;
-    border-radius: 0.5rem;
-}
-#tasks
-{
-    margin-top: 1em;
-    border-radius: 0.5em;
-    width: 100%;
-    position: relative;
-    padding: 1em 0.5em;
-}
-.task
-{
-    background: rgba(255,255,255,0.1);
-    padding: 0.8em 1em;
-    display: grid;
-    grid-template-columns: 1fr 8fr 2fr 2fr;
-    gap: 1em;
-    box-shadow: 0, 0.5em rgba(0,0,0,0.05);
-    align-items: center;
-    cursor: pointer;
-    border-radius: 0.9rem;
-}
-.task:not(:first-child)
-{
-    margin-top: 1em;
-} 
-.task span
-{
-    font: 0.9em;
     font-weight: 400;
-    word-break: break-all;
-}
-.task button
-{
-    color: #fdfdfd;
-    width: 100%;
-    padding: 1em 0;
-    border-radius: 0.5em;
-    border: none;
-    cursor: pointer;
-    outline: none;
-}
-.edit
-{
-    background-color: #3449a0;
-}
-.delete 
-{
-    background-color: #3449a0;
-}
-#error 
-{
-    text-align: center;
-    background-color: transparent;
-    color: #5ce7ff;
-    margin-top: 1.5em;
-    padding: 1em 0;
-    display: none;
-}
-.completed
-{
-    text-decoration: line-through;
-    color: #5a95ff;
-}
-#pend-tasks span
-{
-    color: #5a95ff;
-     /* look for a better color */
 }
 
+#wrapper button {
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 1em;
+    background-color: #9c6bbe;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 0 1.5em;
+    transition: all 0.3s ease;
+}
+
+#wrapper button:hover {
+    background-color: #7a4aaf;
+    transform: translateY(-1px);
+}
+
+#tasks {
+    margin-top: 1.5em;
+    border-radius: 8px;
+    width: 100%;
+    position: relative;
+}
+
+.task {
+    background: white;
+    padding: 0.8em 1em;
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    gap: 1em;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 8px;
+    margin-bottom: 0.8em;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.task:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(122, 74, 175, 0.1);
+}
+
+.task span {
+    font-size: 0.95em;
+    font-weight: 400;
+    word-break: break-all;
+    color: #555;
+}
+
+.task button {
+    color: white;
+    padding: 0.6em 0.8em;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+}
+
+.task button:hover {
+    opacity: 0.9;
+}
+
+.edit {
+    background-color: #7a4aaf;
+}
+
+.delete {
+    background-color: #e67eaa;
+}
+
+#error {
+    text-align: center;
+    background-color: #ffe6f0;
+    color: #e67eaa;
+    margin-top: 1em;
+    padding: 0.8em;
+    border-radius: 8px;
+    display: none;
+    font-weight: 500;
+}
+
+.completed {
+    text-decoration: line-through;
+    color: #a0a0a0;
+}
+
+#pend-tasks {
+    font-size: 0.95em;
+    color: #666;
+    text-align: center;
+    margin-top: 1.5em;
+}
+
+#pend-tasks span {
+    color: #7a4aaf;
+    font-weight: 600;
+}
+
+/* Footer Styles */
 .app-footer {
-    background: rgba(255,255,255,0.1);
-    backdrop-filter: blur(10px);
-    color: #3449a0;
+    background: white;
+    color: #666;
     padding: 2em;
     margin-top: 2em;
-    border-radius: 0.5em;
-    box-shadow: 0 1em 2em rgba(0,0,0,0.3);
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(122, 74, 175, 0.1);
 }
 
 .footer-content {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: 1.5em;
     margin-bottom: 1.5em;
 }
 
 .footer-left h3 {
     font-size: 1.5em;
     margin-bottom: 0.5em;
-    color: #5a95ff;
+    color: #7a4aaf;
+}
+
+.footer-left p {
+    color: #888;
 }
 
 .footer-right {
     display: flex;
-    align-items: center;
-    gap: 2em;
+    justify-content: center;
+    gap: 1.5em;
+    flex-wrap: wrap;
 }
 
 .footer-stats {
@@ -191,14 +212,15 @@ input::placeholder {
 
 .stat-item {
     text-align: center;
-    background: rgba(255,255,255,0.05);
-    padding: 1em;
-    border-radius: 0.5em;
+    background: #f9f0ff;
+    padding: 1em 1.5em;
+    border-radius: 8px;
+    min-width: 120px;
 }
 
 .stat-item i {
     font-size: 1.5em;
-    color: #020202;
+    color: #7a4aaf;
     margin-bottom: 0.5em;
 }
 
@@ -207,44 +229,49 @@ input::placeholder {
     display: block;
     font-size: 1.2em;
     font-weight: bold;
-    color: #000000;
+    color: #7a4aaf;
 }
 
-.footer-links {
-    display: flex;
-    gap: 1em;
-}
-
-.footer-link {
-    color: rgb(255, 255, 255);
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.footer-link:hover {
-    color: #5a95ff;
+.stat-item p {
+    font-size: 0.9em;
+    color: #888;
 }
 
 .footer-bottom {
-    border-top: 1px solid rgba(255,255,255,0.1);
-    padding-top: 1em;
+    border-top: 1px solid #f0e0fa;
+    padding-top: 1.5em;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 1.5em;
     align-items: center;
+    text-align: center;
 }
 
 .social-icons {
     display: flex;
-    gap: 1em;
+    gap: 1.5em;
 }
 
 .social-icon {
-    color: rgb(0, 0, 0);
-    font-size: 1.2em;
-    transition: color 0.3s ease;
+    color: #7a4aaf;
+    font-size: 1.4em;
+    transition: all 0.3s ease;
 }
 
 .social-icon:hover {
-    color: #5a95ff;
+    color: #e67eaa;
+    transform: translateY(-2px);
 }
 
+/* Responsive adjustments */
+@media (min-width: 768px) {
+    .footer-content {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+    
+    .footer-bottom {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
