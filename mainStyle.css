@@ -6,7 +6,10 @@
 }
 
 body {
-    background-color: #faf5ff; /* Soft lavender background */
+    background-image: url('/c:/Users/Capaciti/Pictures/TO-DO-LIST/to-do-list%20image.PNG');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     font-family: "Poppins", sans-serif;
     color: #333;
     line-height: 1.6;
